@@ -38,6 +38,8 @@ class SaveTextToFile:
             }
         }
 
+    RETURN_TYPES = ()
+    RETURN_NAMES = ()
     FUNCTION = "save_text_to_file"
     CATEGORY = "Tools"
 
@@ -50,6 +52,7 @@ class SaveTextToFile:
             print(basename)
         with open(file_path + basename + ".txt", "w", encoding="utf-8") as file:
             file.write(multiline_text)
+        return ()
 
 
 NODE_CLASS_MAPPINGS = {
