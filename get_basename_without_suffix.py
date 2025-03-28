@@ -38,8 +38,8 @@ class SaveTextToFile:
             }
         }
 
-    RETURN_TYPES = ()
-    RETURN_NAMES = ()
+    RETURN_TYPES = ()  # 即使没有返回值也应该返回空元组
+    RETURN_NAMES = ()  # 即使没有返回值也应该返回空元组
     FUNCTION = "save_text_to_file"
     CATEGORY = "Tools"
 
@@ -52,7 +52,7 @@ class SaveTextToFile:
             print(basename)
         with open(file_path + basename + ".txt", "w", encoding="utf-8") as file:
             file.write(multiline_text)
-        return ()
+        return ()  # 即使没有返回值也应该返回空元组
 
 
 NODE_CLASS_MAPPINGS = {
