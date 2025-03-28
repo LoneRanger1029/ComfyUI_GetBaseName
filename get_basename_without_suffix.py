@@ -24,10 +24,40 @@ class GetBasenameWithoutSuffix:
         return (basename[:basename.rfind('.')],)
 
 
+class SaveTextToFile:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "multiline_text": ("STRING", ),
+                "file_path": ("STRING",),
+                "basename": ("STRING",)
+            }
+        }
+
+    FUNCTION = "save_text_to_file"
+    CATEGORY = "Tools"
+
+
+    def save_text_to_file(self, multiline_text, file_path, basename):
+        """basename: 无后缀的文件名"""
+        if '.' in basename:
+            print(basename)
+            basename = basename.split('.')[-2]
+            print(basename)
+        with open(file_path + basename + ".txt", "w", encoding="utf-8") as file:
+            file.write(multiline_text)
+
+
 NODE_CLASS_MAPPINGS = {
-    "GetBasenameWithoutSuffix": GetBasenameWithoutSuffix
+    "GetBasenameWithoutSuffix": GetBasenameWithoutSuffix,
+    "SaveTextToFile": SaveTextToFile
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GetBasenameWithoutSuffix": "Get Basename Without Suffix"
+    "GetBasenameWithoutSuffix": "Get Basename Without Suffix",
+    "SaveTextToFile": "Save Text To File"
 }
