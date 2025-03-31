@@ -19,7 +19,7 @@ class GetBasenameWithoutSuffix:
     CATEGORY = "Tools"
 
     def get_basename(self, file_path):
-        """获得无后缀的文件名称, 参数名需要和上吗 required 对应"""
+        """获得无后缀的文件名称, 参数名需要和上面 required 对应"""
         basename = os.path.basename(file_path)
         return (basename[:basename.rfind('.')],)
 
@@ -32,9 +32,8 @@ class SaveTextToFile:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "multiline_text": ("STRING", ),
-                "file_path": ("STRING",),
-                "basename": ("STRING",)
+                "multiline_text": ("STRING",),
+                "file_path": ("STRING",)
             }
         }
 
@@ -43,15 +42,20 @@ class SaveTextToFile:
     FUNCTION = "save_text_to_file"
     CATEGORY = "Tools"
 
-
-    def save_text_to_file(self, multiline_text, file_path, basename):
-        """basename: 无后缀的文件名"""
-        if '.' in basename:
-            print(basename)
-            basename = basename.split('.')[-2]
-            print(basename)
-        with open(file_path + basename + ".txt", "w", encoding="utf-8") as file:
-            file.write(multiline_text)
+    def save_text_to_file(self, multiline_text, file_path):
+        """
+        :param multiline_text: 图片对应的标签值
+        :param file_path: 图片的文件全路径
+        """
+        try:
+            dir_path = os.path.dirname(file_path)
+            file_name = os.path.basename(file_path)
+            basename = file_name[: file_name.rfind('.')]
+            full_path = os.path.join(dir_path, basename + ".txt")
+            with open(full_path, "w", encoding="utf-8") as file:
+                file.write(multiline_text)
+        except Exception as e:
+            print(f"写入文件时出错: {e}")
         return ()  # 即使没有返回值也应该返回空元组
 
 
