@@ -25,39 +25,47 @@ class GetBasenameWithoutSuffix:
 
 
 class SaveTextToFile:
-    def __init__(self):
-        pass
 
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "multiline_text": ("STRING",),
-                "file_path": ("STRING",)
+                "text": ("STRING", {"multiline": True, "default": ""}),
+                "output_file_path": ("STRING", {"multiline": False, "default": ""}),
+                "file_name": ("STRING", {"multiline": False, "default": ""}),
+                "operation_system": (["linux", "mac", "windows"])
             }
         }
 
-    RETURN_TYPES = ()  # 即使没有返回值也应该返回空元组
-    RETURN_NAMES = ()  # 即使没有返回值也应该返回空元组
-    FUNCTION = "save_text_to_file"
-    CATEGORY = "Tools"
+    RETURN_TYPES = ()
+    RETURN_NAMES = ()
+    OUTPUT_NODE = False
+    FUNCTION = 'save_text_to_file'
+    CATEGORY = 'Tools'
 
-    def save_text_to_file(self, multiline_text, file_path):
-        """
-        :param multiline_text: 图片对应的标签值
-        :param file_path: 图片的文件全路径
-        """
-        try:
-            dir_path = os.path.dirname(file_path)
-            file_name = os.path.basename(file_path)
-            basename = file_name[: file_name.rfind('.')]
-            full_path = os.path.join(dir_path, basename + ".txt")
-            with open(full_path, "w", encoding="utf-8") as file:
-                file.write(multiline_text)
-        except Exception as e:
-            print(f"写入文件时出错: {e}")
-        return ()  # 即使没有返回值也应该返回空元组
+    def save_text_to_file(self, text, output_file_path, file_name, operation_system):
 
+        if output_file_path.endswith('/') or output_file_path.endswith('\\'):
+            output_file_path = output_file_path[:-1]
+
+        if operation_system == 'windows':
+            filepath = output_file_path + "\\" + file_name + ".txt"
+        else:
+            filepath = output_file_path + "/" + file_name + ".txt"
+
+        if output_file_path == "" or file_name == "":
+            print(f"[Warning] Save Text List. No file details found. No file output.")
+            return ()
+
+        print(f"[Info] Save Text : Saving to {filepath}")
+
+        with open(filepath, 'w', encoding='utf-8') as file:
+            try:
+                file.write(text)
+            except Exception as e:
+                print(f"[Error] Save Text Error: {e}")
+
+        return ()
 
 NODE_CLASS_MAPPINGS = {
     "GetBasenameWithoutSuffix": GetBasenameWithoutSuffix,
